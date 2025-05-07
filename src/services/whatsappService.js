@@ -1,6 +1,6 @@
 const makeWASocket = require('@whiskeysockets/baileys').default;
-const { DisconnectReason, useMultiFileAuthState, delay } = require('@whiskeysockets/baileys');
-const path = require('path');
+const { DisconnectReason, delay } = require('@whiskeysockets/baileys');
+const { useDBAuthState } = require('./authStateHandler');
 const PendingMessage = require('../models/pendingMessage');
 const Autoreply = require('../models/autoreply');
 const { Op } = require('sequelize');
@@ -10,7 +10,6 @@ class WhatsAppService {
         this.sock = null;
         this.qr = null;
         this.isConnected = false;
-        this.authPath = path.join(__dirname, '../../auth_info');
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 5;
         this.reconnectDelay = 5000;
@@ -35,7 +34,7 @@ class WhatsAppService {
 
         try {
             console.log('Initializing WhatsApp connection...');
-            const { state, saveCreds } = await useMultiFileAuthState(this.authPath);
+            const { state, saveCreds, clearState } = await useDBAuthState();
             
             this.sock = makeWASocket({
                 auth: state,
@@ -262,12 +261,8 @@ class WhatsAppService {
                 this.sock = null;
             }
             
-            const fs = require('fs').promises;
-            try {
-                await fs.rm(this.authPath, { recursive: true, force: true });
-            } catch (error) {
-                console.warn('Error deleting auth files:', error);
-            }
+            const { clearState } = await useDBAuthState();
+            await clearState();
             
             this.isConnected = false;
             this.qr = null;

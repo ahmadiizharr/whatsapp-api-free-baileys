@@ -12,9 +12,6 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-# Create directory for WhatsApp auth
-RUN mkdir -p /usr/src/app/auth_info
-
 # Expose port
 EXPOSE 3000
 
