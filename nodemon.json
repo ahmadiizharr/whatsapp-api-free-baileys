@@ -1,0 +1,15 @@
+{
+    "ignore": [
+        "auth_info/*",
+        "*.sqlite",
+        "database.sqlite",
+        ".git",
+        "node_modules/**/node_modules"
+    ],
+    "verbose": true,
+    "watch": [
+        "src/",
+        "server.js"
+    ],
+    "ext": "js,json"
+}

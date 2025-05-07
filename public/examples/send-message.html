@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp API - Send Message Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #128C7E;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h1>Send WhatsApp Message</h1>
+    <div class="form-group">
+        <label for="phone">Phone Number:</label>
+        <input type="text" id="phone" placeholder="Enter phone number (e.g., 6281234567890)" />
+        <small>Format: Country code + Phone number without '+' or spaces</small>
+    </div>
+    <div class="form-group">
+        <label for="message">Message:</label>
+        <textarea id="message" rows="4" placeholder="Enter your message"></textarea>
+    </div>
+    <button onclick="sendMessage()">Send Message</button>
+    <div id="result" class="result"></div>
+
+    <script>
+        async function sendMessage() {
+            const phone = document.getElementById('phone').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const resultDiv = document.getElementById('result');
+
+            if (!phone || !message) {
+                showResult('Please fill in both phone number and message', false);
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/messages/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        to: phone,
+                        message: message
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showResult('Message sent successfully!', true);
+                    // Clear form
+                    document.getElementById('phone').value = '';
+                    document.getElementById('message').value = '';
+                } else {
+                    showResult(`Failed to send message: ${data.message}`, false);
+                }
+            } catch (error) {
+                showResult(`Error: ${error.message}`, false);
+            }
+        }
+
+        function showResult(message, isSuccess) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = message;
+            resultDiv.style.display = 'block';
+            resultDiv.className = `result ${isSuccess ? 'success' : 'error'}`;
+        }
+    </script>
+
+    <div style="margin-top: 40px;">
+        <h2>API Documentation</h2>
+        <pre>
+POST /api/messages/send
+Content-Type: application/json
+
+{
+    "to": "6281234567890",
+    "message": "Hello, this is a test message"
+}
+
+Response (Success):
+{
+    "success": true,
+    "message": "Message sent successfully"
+}
+
+Response (Error):
+{
+    "success": false,
+    "message": "Error description"
+}
+        </pre>
+    </div>
+</body>
+</html>

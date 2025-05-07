@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send WhatsApp Message</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Send WhatsApp Message</h5>
+                            <div>
+                                <button onclick="checkConnectionStatus()" class="btn btn-info btn-sm me-2">
+                                    Refresh Status
+                                </button>
+                                <a href="/" class="btn btn-outline-primary btn-sm">Back to Dashboard</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Connection Status -->
+                        <div class="alert" id="connection-status" role="alert">
+                            Checking connection...
+                        </div>
+                        <div id="qr-code" class="text-center mb-3">
+                            <!-- QR code will be generated here -->
+                        </div>
+
+                        <!-- Message Form -->
+                        <form id="message-form">
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">+</span>
+                                    <input type="text" class="form-control" id="phone" name="phone" 
+                                           placeholder="e.g., 6281234567890" required
+                                           pattern="[0-9]+"
+                                           title="Please enter numbers only">
+                                </div>
+                                <div class="form-text">Enter the full phone number including country code, without + or spaces</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Message</label>
+                                <textarea class="form-control" id="message" name="message" 
+                                          rows="4" required
+                                          placeholder="Type your message here..."></textarea>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary" id="send-button">
+                                    Send Message
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Message History -->
+                        <div class="mt-4">
+                            <h6>Recent Messages</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Time</th>
+                                            <th>To</th>
+                                            <th>Message</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="message-history">
+                                        <!-- Message history will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/send-message.js"></script>
+</body>
+</html>
