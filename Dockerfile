@@ -12,7 +12,7 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-# Create directories for SQLite database and WhatsApp auth
+# Create directory for WhatsApp auth
 RUN mkdir -p /usr/src/app/auth_info
 
 # Expose port

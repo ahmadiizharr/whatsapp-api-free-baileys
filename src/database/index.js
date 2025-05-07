@@ -1,23 +1,14 @@
 const { Sequelize } = require('sequelize');
-const path = require('path');
-const fs = require('fs');
 
-// Delete existing database file if it exists
-const dbPath = path.join(__dirname, '../../database.sqlite');
-try {
-    if (fs.existsSync(dbPath)) {
-        fs.unlinkSync(dbPath);
-        console.log('Existing database file deleted');
+// Create PostgreSQL database connection
+const sequelize = new Sequelize('postgresql://postgres:AyamKampus98!@db.tazsyvwtubhvpmslrncm.supabase.co:5432/postgres', {
+    logging: false,
+    dialectOptions: {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false
+        }
     }
-} catch (error) {
-    console.error('Error deleting database file:', error);
-}
-
-// Create SQLite database connection
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: dbPath,
-    logging: false
 });
 
 // Test database connection
